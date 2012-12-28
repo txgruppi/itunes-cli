@@ -1,0 +1,179 @@
+<!DOCTYPE html>  <html> <head>   <title>main.m</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <ul class="sections">           <li id="title">             <div class="annotation">                 <h1>main.m</h1>             </div>         </li>                              <li id="section-1">             <div class="annotation">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                           <p>Native iTunes Command line Interface <br />
+A simple cli to control itunes, based on iTunes Command Line Control v1.0 written by David Schlosnagle</p>
+
+<p>@author Tarcísio Gruppi <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#111;:&#x74;&#120;g&#x72;upp&#x69;&#x40;&#x67;&#109;&#97;&#x69;&#x6C;&#x2E;&#x63;&#111;&#x6D;">&#x74;&#120;g&#x72;upp&#x69;&#x40;&#x67;&#109;&#97;&#x69;&#x6C;&#x2E;&#x63;&#111;&#x6D;</a> <br />
+@date 2012-12-28</p>
+
+             </div>                          <div class="content"><div class="highlight"><pre><span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;string.h&gt;</span>
+<span class="cp">#include &quot;iTunes.h&quot;</span></pre></div></div>                      </li>                              <li id="section-2">             <div class="annotation">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>                           
+
+<p>Run iTunes if its not running</p>
+
+<p>@param *itunes The iTunesApplication instance</p>
+
+             </div>                          <div class="content"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">runIfNotRunning</span><span class="p">(</span><span class="n">iTunesApplication</span> <span class="o">*</span><span class="n">itunes</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">itunes</span> <span class="n">isRunning</span><span class="p">])</span> <span class="p">{</span>
+    <span class="p">[</span><span class="n">itunes</span> <span class="n">run</span><span class="p">];</span>
+  <span class="p">}</span>
+<span class="p">}</span></pre></div></div>                      </li>                              <li id="section-3">             <div class="annotation">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>                           
+
+<p>Quit iTunes if its running</p>
+
+<p>@param *itunes iTunesApplication instance</p>
+
+             </div>                          <div class="content"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">quitIfRunning</span><span class="p">(</span><span class="n">iTunesApplication</span> <span class="o">*</span><span class="n">itunes</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">([</span><span class="n">itunes</span> <span class="n">isRunning</span><span class="p">])</span> <span class="p">{</span>
+    <span class="p">[</span><span class="n">itunes</span> <span class="n">quit</span><span class="p">];</span>
+  <span class="p">}</span>
+<span class="p">}</span></pre></div></div>                      </li>                              <li id="section-4">             <div class="annotation">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>                           
+
+<p>Get iTunes current playState</p>
+
+<p>States: <br />
+  stopped <br />
+  playing <br />
+  paused <br />
+  fast forwarding <br />
+  rewinding <br />
+  closed</p>
+
+<p>@param *itunes iTunesApplication instance</p>
+
+<p>@return state string</p>
+
+             </div>                          <div class="content"><div class="highlight"><pre><span class="kt">char</span> <span class="o">*</span><span class="nf">getState</span><span class="p">(</span><span class="n">iTunesApplication</span> <span class="o">*</span><span class="n">itunes</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">state</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">([</span><span class="n">itunes</span> <span class="n">isRunning</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">itunes</span><span class="p">.</span><span class="n">playerState</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="nl">iTunesEPlSStopped:</span>
+      <span class="n">state</span> <span class="o">=</span> <span class="s">&quot;stopped&quot;</span><span class="p">;</span>
+      <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nl">iTunesEPlSPlaying:</span>
+      <span class="n">state</span> <span class="o">=</span> <span class="s">&quot;playing&quot;</span><span class="p">;</span>
+      <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nl">iTunesEPlSPaused:</span>
+      <span class="n">state</span> <span class="o">=</span> <span class="s">&quot;paused&quot;</span><span class="p">;</span>
+      <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nl">iTunesEPlSFastForwarding:</span>
+      <span class="n">state</span> <span class="o">=</span> <span class="s">&quot;fast forwarding&quot;</span><span class="p">;</span>
+      <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nl">iTunesEPlSRewinding:</span>
+      <span class="n">state</span> <span class="o">=</span> <span class="s">&quot;rewinding&quot;</span><span class="p">;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="s">&quot;closed&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">state</span><span class="p">;</span>
+<span class="p">}</span></pre></div></div>                      </li>                              <li id="section-5">             <div class="annotation">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>                           
+
+<p>Print usage message</p>
+
+<p>@param *cmd the command used to run this app Ex.: argv[0]</p>             </div>                          <div class="content"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">usage</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">cmd</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Usage: %s &lt;command&gt;</span><span class="se">\n\n</span><span class="s">  Commands:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;status&quot;</span><span class="p">,</span>                     <span class="s">&quot;Show iTunes status and track information&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;play|pause|playpause&quot;</span><span class="p">,</span>       <span class="s">&quot;Toggle the playing/paused state of the current track&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;next&quot;</span><span class="p">,</span>                       <span class="s">&quot;Advance to the next track in the current playlist&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;prev&quot;</span><span class="p">,</span>                       <span class="s">&quot;Return to the previous track in the current playlist&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;back&quot;</span><span class="p">,</span>                       <span class="s">&quot;Reposition to beginning of current track or go to previous track if already at start of current track&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;stop&quot;</span><span class="p">,</span>                       <span class="s">&quot;Stop playback&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;resume&quot;</span><span class="p">,</span>                     <span class="s">&quot;Disable fast forward/rewind and resume playback, if playing&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;fastForward|fastforward|ff&quot;</span><span class="p">,</span> <span class="s">&quot;Skip forward in a playing track&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;rewind|rw&quot;</span><span class="p">,</span>                  <span class="s">&quot;Skip backwards in a playing track&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;mute&quot;</span><span class="p">,</span>                       <span class="s">&quot;Mute iTunes&#39; volume&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;unmute&quot;</span><span class="p">,</span>                     <span class="s">&quot;Unmute iTunes&#39; volume&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;vol up&quot;</span><span class="p">,</span>                     <span class="s">&quot;Increase iTunes&#39; volume by 10%&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;vol down&quot;</span><span class="p">,</span>                   <span class="s">&quot;Decrease iTunes&#39; volume by 10%&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;vol #&quot;</span><span class="p">,</span>                      <span class="s">&quot;Set iTunes&#39; volume to # [0-100]&quot;</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;    %-28s</span><span class="se">\n</span><span class="s">      %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;quit&quot;</span><span class="p">,</span>                       <span class="s">&quot;Quit iTunes&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">iTunesApplication</span> <span class="o">*</span><span class="n">itunes</span> <span class="o">=</span> <span class="p">[</span><span class="n">SBApplication</span> <span class="nl">applicationWithBundleIdentifier:</span><span class="s">@&quot;com.apple.iTunes&quot;</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;play&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;pause&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;playpause&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">playpause</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;next&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">nextTrack</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;prev&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">previousTrack</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;back&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">backTrack</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;stop&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">stop</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;resume&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">resume</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;fastForward&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;fastforward&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;ff&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">fastForward</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;rewind&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;rw&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="p">[</span><span class="n">itunes</span> <span class="n">rewind</span><span class="p">];</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;quit&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">quitIfRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;mute&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="n">itunes</span><span class="p">.</span><span class="n">mute</span> <span class="o">=</span> <span class="n">true</span><span class="p">;</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;unmute&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+      <span class="n">itunes</span><span class="p">.</span><span class="n">mute</span> <span class="o">=</span> <span class="n">false</span><span class="p">;</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;iTunes is %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">getState</span><span class="p">(</span><span class="n">itunes</span><span class="p">));</span>
+      <span class="k">if</span> <span class="p">([</span><span class="n">itunes</span> <span class="n">isRunning</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">iTunesTrack</span> <span class="o">*</span><span class="n">track</span> <span class="o">=</span> <span class="n">itunes</span><span class="p">.</span><span class="n">currentTrack</span><span class="p">;</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Current track %s: %s [%ld of %d seconds]</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">track</span><span class="p">.</span><span class="n">artist</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="p">[</span><span class="n">track</span><span class="p">.</span><span class="n">name</span> <span class="n">UTF8String</span><span class="p">],</span> <span class="n">itunes</span><span class="p">.</span><span class="n">playerPosition</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">track</span><span class="p">.</span><span class="n">duration</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;vol&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;up&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">itunes</span><span class="p">.</span><span class="n">soundVolume</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+          <span class="n">itunes</span><span class="p">.</span><span class="n">soundVolume</span> <span class="o">+=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;down&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">runIfNotRunning</span><span class="p">(</span><span class="n">itunes</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">itunes</span><span class="p">.</span><span class="n">soundVolume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+          <span class="n">itunes</span><span class="p">.</span><span class="n">soundVolume</span> <span class="o">-=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">vol</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+        <span class="n">itunes</span><span class="p">.</span><span class="n">soundVolume</span> <span class="o">=</span> <span class="n">vol</span><span class="p">;</span>
+        <span class="n">cmdFound</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cmdFound</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">usage</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div></div>                      </li>              </ul>    </div> </body> </html> 
