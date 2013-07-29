@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
       printf("iTunes is %s\n", getState(itunes));
       if ([itunes isRunning]) {
         iTunesTrack *track = itunes.currentTrack;
-        printf("Current track %s: %s [%ld of %d seconds]\n", [track.artist UTF8String], [track.name UTF8String], itunes.playerPosition, (int) track.duration);
+        printf("Current track %s: %s [%.2f of %.2f seconds]\n", [track.artist UTF8String], [track.name UTF8String], itunes.playerPosition, track.duration);
       }
       cmdFound = 1;
     }
